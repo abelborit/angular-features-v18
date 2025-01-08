@@ -1,17 +1,50 @@
 # Editor configuration, see https://editorconfig.org
+
+# Indica que se aplican estas reglas al proyecto
 root = true
 
+# Regla general para todos los archivos
 [*]
 charset = utf-8
+end_of_line = lf
 indent_style = space
 indent_size = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+# Configuración específica para archivos TypeScript
 [*.ts]
 quote_type = single
 ij_typescript_use_double_quotes = false
+indent_style = space
+indent_size = 2
 
+# Configuración específica para archivos JSON
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Configuración específica para archivos HTML
+[*.html]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = false
+
+# Configuración específica para archivos CSS y SCSS
+[*.css]
+indent_style = space
+indent_size = 2
+
+[*.scss]
+indent_style = space
+indent_size = 2
+
+# Configuración específica para archivos Markdown
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
+
+# Configuración específica para archivos YAML
+[*.yml]
+indent_style = space
+indent_size = 2
