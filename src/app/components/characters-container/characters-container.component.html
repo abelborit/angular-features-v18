@@ -1,1 +1,15 @@
-<p>characters-container works!</p>
+<!-- <p>
+  <strong>{{ title }}</strong> works!
+</p> -->
+
+<div>
+  <!-- se está usando el pipe "async" que lo que quiere decir es que cuando la petición se complete y tenga la data, es decir, cuando la parte asíncrona o el evento que es asíncrono, es decir, el characters$, se complete y cumpla por medio del pipe "async" entonces lo que resulte la va a guardar en un lugar que será "characters" -->
+  @if (characters$ | async; as characters) {
+    <!-- entonces con la data del evento asíncrono ya guardado en "characters" ya se puede empezar a maquetar y mostrar la información -->
+
+    <!-- el "track" es como para identificar a cada elemento que viene mediante un valor X, en este caso, mediante su id. Sería algo similar a usar la "key" de React -->
+    @for (character of characters; track character.id) {
+      {{ character.name }}
+    }
+  }
+</div>
