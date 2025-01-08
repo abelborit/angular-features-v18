@@ -1,7 +1,7 @@
 /* Este código configura una aplicación Angular utilizando la nueva API basada en ApplicationConfig, con algunas características avanzadas como la detección de cambios con y sin Zone.js, rutas y soporte para hidratación del lado del cliente (usado en aplicaciones SSR) */
 import {
   ApplicationConfig,
-  provideZoneChangeDetection,
+  // provideZoneChangeDetection,
   provideExperimentalZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
   /* aquí están los proveedores del appConfig */
   providers: [
     /* Configura la detección de cambios basada en Zone.js con la opción de "event coalescing". Event Coalescing: Agrupa múltiples eventos en un solo ciclo de detección de cambios, lo que mejora el rendimiento al reducir el número de verificaciones de cambios */
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    // provideZoneChangeDetection({ eventCoalescing: true }), // si se está usando "zoneless" entonces hay que retirar lo que se está usando todavía del Zone.js para tener todos los beneficios del "zoneless" porque si no dará un error similar a -- NG0408: Invalid change detection configuration: provideZoneChangeDetection and provideExperimentalZonelessChangeDetection cannot be used together. --
 
     /* Proporciona las rutas para la aplicación. routes: Es un arreglo que define la navegación de la aplicación (equivalente a RouterModule.forRoot(routes) en configuraciones tradicionales) */
     provideRouter(routes),
