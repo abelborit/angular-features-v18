@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 /* ApplicationConfig es una interfaz introducida en Angular 15 que define la configuración global de la aplicación. Reemplaza parcialmente el uso de NgModule para configurar proveedores, rutas y otros ajustes globales */
 export const appConfig: ApplicationConfig = {
@@ -28,6 +29,9 @@ export const appConfig: ApplicationConfig = {
 
     /* Proporciona una alternativa experimental para la detección de cambios sin Zone.js. En lugar de interceptar tareas asincrónicas automáticamente (como hace Zone.js), Angular solo actualiza las vistas cuando el flujo de datos lo indica explícitamente. Es útil para aplicaciones que usan patrones reactivas como RxJS o librerías como NgRx. */
     provideExperimentalZonelessChangeDetection(),
+
+    /* HttpClient se proporciona mediante la función auxiliar "provideHttpClient" que es una nueva funcionalidad introducida como parte de la modernización del manejo de solicitudes HTTP, permitiendo el uso de la API Fetch en lugar de depender de XMLHttpRequest (XHR). Entonces para usar fetch de forma predeterminada en lugar de XMLHttpRequest, se configura el "provideHttpClient" ya que acepta una lista de configuraciones de funciones opcionales para habilitar o configurar el comportamiento de diferentes aspectos del cliente. En este caso se usa "withFetch" y sirve para que el cliente use de forma predeterminada el fetch en lugar del XMLHttpRequest. */
+    provideHttpClient(withFetch()),
   ],
 };
 
