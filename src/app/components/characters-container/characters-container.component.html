@@ -23,7 +23,13 @@
     <!-- el "track" es como para identificar a cada elemento que viene mediante un valor X, en este caso, mediante su id. Sería algo similar a usar la "key" de React. La expresión "track" permite que Angular mantenga una relación entre los datos y los nodos DOM de la página. Esto permite que Angular optimice el rendimiento ejecutando las operaciones DOM mínimas necesarias cuando los datos cambian. Hay que seleccionar una propiedad que identifique de forma única cada elemento de la expresión "track". Si en nuestro modelo de datos se incluye una propiedad de identificación única, comúnmente id o uuid, se utiliza este valor pero si los datos no incluyen un campo como este, entonces hay que agregar un identificador único. Para las colecciones estáticas que nunca cambian, se puede usar "$index" para indicarle a Angular que rastree cada elemento por su índice en la colección. -->
     @for (character of characters; track character.id) {
       <!-- {{ character.name }} -->
-      <app-character-card [character]="character" />
+
+      <!-- @defer(.....) es un nuevo control flow dentro de Angular v18 que nos dice que va a renderizar lo que esté dento del "defer" cuando se cumpla cierta condición. En este caso haremos que se renderizarán los componente cuando estén en pantalla. También se tiene que hacer uso del placeholder que será para decirle que mientras el defer todavía no esté entonces se muestre otra cosa -->
+      @defer (on viewport) {
+        <app-character-card [character]="character" />
+      } @placeholder {
+        <div class="placeholder"></div>
+      }
     }
   }
 </div>
