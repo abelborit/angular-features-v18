@@ -1,1 +1,41 @@
-<p>character-card works!</p>
+<!-- ***** FORMA 1: sin usar "@let" ***** -->
+
+<!-- <div>
+  @if ({{character()}}) {
+    .....
+  }
+</div> -->
+
+<!-- ************************************************************************************************************************ -->
+
+<!-- ***** FORMA 2: usando "@let" ***** -->
+
+<!-- @let characterInfo = character(); -->
+
+<!-- <div>
+  @if (characterInfo) {
+    .....
+  }
+</div> -->
+
+<!-- ************************************************************************************************************************ -->
+
+<!-- el "@let" es algo nuevo de Angular que nos permitirá crear variables, es decir, permite definir una variable local y reutilizarla en todo el template HTML -->
+<!-- Las declaraciones @let son similares a los let en JavaScript y sus valores pueden ser cualquier expresión válida de Angular. Las expresiones se volverán a evaluar cada vez que se ejecute el template HTML. Importante que se termine en un ";" -->
+@let characterInfo = character();
+
+<div>
+  <!-- colocarlo directamente la señal sería colocar la referencia a la señal pero no al valor de la señal como tal. Para tener el valor hay que colocarlo como si fuera un método, es decir colocando "()" -->
+  @if (characterInfo) {
+    <h3>{{characterInfo.name}}</h3>
+
+    <!-- para realizar la optimización de imágenes se está usando el "NgOptimizedImage" y aquí se tendría que usar el -- [ngSrc]="....." -- -->
+    <!-- al trabjarlo con [] las propiedades como [alt]="....." quiere decir que es una propiedad enlazada al valor que se esté pasando. Esto significa que el contenido del atributo alt será dinámico y reflejará el valor actual de characterInfo.name. Si characterInfo.name cambia en tiempo de ejecución, el valor del atributo alt también se actualizará automáticamente. Y si no se colocara entonces alt no sería un valor dinámico y se interpreta literalmente como el texto "characterInfo.name" y no como el valor de la propiedad del componente que necesitamos -->
+    <img
+      [ngSrc]="characterInfo.image"
+      [alt]="characterInfo.name"
+      width="200"
+      height="200"
+    />
+  }
+</div>

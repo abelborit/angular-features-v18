@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CharactersService } from '../../services/characters.service';
 import { Observable } from 'rxjs';
 import { CharacterInterface } from '../../interfaces';
+import { CharacterCardComponent } from '../character-card';
 
 /*
 - selector: Define el nombre del selector del componente, que será usado como una etiqueta HTML para incluir este componente en plantillas de otros componentes.
@@ -25,7 +26,7 @@ import { CharacterInterface } from '../../interfaces';
 @Component({
   selector: 'app-characters-container',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, CharacterCardComponent],
   templateUrl: './characters-container.component.html',
   styleUrl: './characters-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
