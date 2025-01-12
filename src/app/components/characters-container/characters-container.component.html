@@ -26,7 +26,11 @@
 
       <!-- @defer(.....) es un nuevo control flow dentro de Angular v18 que nos dice que va a renderizar lo que esté dento del "defer" cuando se cumpla cierta condición. En este caso haremos que se renderizarán los componente cuando estén en pantalla. También se tiene que hacer uso del placeholder que será para decirle que mientras el defer todavía no esté entonces se muestre otra cosa -->
       @defer (on viewport) {
-        <app-character-card [character]="character" />
+        <app-character-card
+          [character]="character"
+          [characterInfo]="characterInfo[character.id]"
+          (loaded)="makeApiCall($event)"
+        />
       } @placeholder {
         <div class="placeholder"></div>
       }

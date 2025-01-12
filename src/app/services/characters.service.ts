@@ -61,14 +61,9 @@ export class CharactersService {
    * @param url URL del personaje.
    * @returns Observable que maneja la información del personaje o `null` en caso de error.
    */
-  public getCharacterInformation(
-    url: string
-  ): Observable<CharacterInterface | null> {
-    return this.httpClient.get<CharacterInterface>(url).pipe(
-      catchError((error) => {
-        console.log(error);
-        return of(null);
-      })
-    );
+  /* se está quitando el null porque sino luego en "makeApiCall" daría un error porque el index no podría ser un undefined */
+  public getCharacterInformation(url: string): Observable<CharacterInterface> {
+    // console.log('url - getCharacterInformation', url);
+    return this.httpClient.get<CharacterInterface>(url);
   }
 }
