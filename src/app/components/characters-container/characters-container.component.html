@@ -1,13 +1,26 @@
+<!-- el trabajar con doble llave {{}} es que Angular identifica eso y sabe que la propiedad que le pasemos dentro de las llaves es del archivo .ts al que está bindeado el html, y busca ahí para añadir el valor. En este caso, las llaves y esta característica no es de JavaScript/TypeScript como tal, sino que Angular está hecho así, puedes ver esta característica en su documentación: https://angular.io/guide/interpolation. La interpolación se refiere a incrustar expresiones en texto marcado. De forma predeterminada, la interpolación utiliza llaves dobles {{<valor a utilizar>}} como delimitadores. -->
 <!-- <p>
   <strong>{{ title }}</strong> works!
 </p> -->
 
 <div>
-  <!-- se está usando el pipe "async" que lo que quiere decir es que cuando la petición se complete y tenga la data, es decir, cuando la parte asíncrona o el evento que es asíncrono, es decir, el characters$, se complete y cumpla por medio del pipe "async" entonces lo que resulte la va a guardar en un lugar que será "characters" -->
+  <!-- se está usando las nuevas sintaxis del @if y @for, antes se usaban las directivas estructurales de ngIf o ngFor lo cual ahora son más fáciles de usar y ya no es necesario importar el "CommonModule" ya que ahora con esta nueva sintaxis las directivas están integradas y esto hace que el paquete de compilación sea más pequeño.
+
+  Además, `@if`, `@for` y `@switch` son más eficientes. El bucle `@for` requiere que se le proporcione un valor de seguimiento, el "track", mientras que la directiva estructural hace que esto sea opcional. Además, la sintaxis `@` no pasa por la canalización de directivas, por lo que puede hacer que cosas como una instrucción `if` se ejecuten más rápido.
+
+  El nuevo flujo de control es más rápido que el anterior. La razón principal es que el nuevo flujo de control utiliza API internas para crear o destruir vistas, pero también porque Angular no tiene que establecer el valor de la propiedad y luego verificar si el valor ha cambiado. En cambio, Angular crea o destruye directamente la vista según la condición, saltándose algunos pasos.
+
+    - https://angular.dev/guide/templates/control-flow
+    - https://www.reddit.com/r/angular/comments/1cn4r3r/when_should_i_use_ngif_over_if/?tl=es-es&rdt=65364
+    - https://stackoverflow.com/questions/77894569/angular-if-vs-ngif-are-they-different
+    - https://angular.love/diving-into-the-new-angular-control-flow-internals#Performance
+  -->
+
+  <!-- se está usando el pipe "async" que lo que quiere decir es que cuando la petición se complete y tenga la data, es decir, cuando la parte asíncrona o el evento que es asíncrono, es decir, el characters$, se complete y cumpla por medio del pipe "async" entonces lo que resulte la va a guardar en un lugar que será "characters". Esto es porque el condicional "@if" permite guardar el resultado de la expresión condicional en una variable para reutilizarlo dentro del bloque, en este caso el resultado lo guarda en "characters" -->
   @if (characters$ | async; as characters) {
     <!-- entonces con la data del evento asíncrono ya guardado en "characters" ya se puede empezar a maquetar y mostrar la información -->
 
-    <!-- el "track" es como para identificar a cada elemento que viene mediante un valor X, en este caso, mediante su id. Sería algo similar a usar la "key" de React -->
+    <!-- el "track" es como para identificar a cada elemento que viene mediante un valor X, en este caso, mediante su id. Sería algo similar a usar la "key" de React. La expresión "track" permite que Angular mantenga una relación entre los datos y los nodos DOM de la página. Esto permite que Angular optimice el rendimiento ejecutando las operaciones DOM mínimas necesarias cuando los datos cambian. Hay que seleccionar una propiedad que identifique de forma única cada elemento de la expresión "track". Si en nuestro modelo de datos se incluye una propiedad de identificación única, comúnmente id o uuid, se utiliza este valor pero si los datos no incluyen un campo como este, entonces hay que agregar un identificador único. Para las colecciones estáticas que nunca cambian, se puede usar "$index" para indicarle a Angular que rastree cada elemento por su índice en la colección. -->
     @for (character of characters; track character.id) {
       {{ character.name }}
     }
