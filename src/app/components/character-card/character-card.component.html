@@ -41,8 +41,11 @@
 
     <h2>Character: {{characterLocal.name}} Info</h2>
 
+    <!-- en este caso al verlo al zoom normal de la pantalla veremos que no cargó la data pero si vamos bajando veremos que ya carga la info de los primeros personajes, para entender un poco mejor, por ejemplo, si ampliamos el zoom hasta 175% veremos que esta info se muestra después, justo cuando el componente está en el viewport y este se llega a ver en la pantalla -->
     @if (characterInfoLocal) {
       <p>{{ characterInfoLocal | json}}</p>
+    } @else {
+      <p>-- No Info yet --</p>
     }
   }
 </div>
