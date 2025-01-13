@@ -5,7 +5,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CharactersService } from '../../services/characters.service';
-import { firstValueFrom, Observable } from 'rxjs';
+import { /* firstValueFrom, */ Observable } from 'rxjs';
 import { CharacterInterface } from '../../interfaces';
 import { CharacterCardComponent } from '../character-card';
 
@@ -57,49 +57,77 @@ export class CharactersContainerComponent {
 
   public readonly characterInfo: Record<string, CharacterInterface> = {};
 
-  public async makeApiCall(url: string): Promise<void> {
-    /* "firstValueFrom" es un método de RxJs que convierte un observable en una promesa, en este caso el observable retornado por el servicio, luego espera (usando await) a que la promesa se resuelva y guarda el valor en la variable character. Como "firstValueFrom" devuelve una promesa entonces se puede usar el "async/await" para esperar a que la promesa se resuelva.
-
-    - Lo que realiza es:
-      - Se suscribe al observable proporcionado.
-      - Espera al primer valor emitido por el observable.
-      - Una vez que recibe el primer valor, automáticamente:
-        - Resuelve la promesa con ese valor.
-        - Se desuscribe del observable.
-
-    - Por ejemplo:
-        const myObservable = of(1, 2, 3); // Un observable que emite 1, 2 y 3.
-        const firstValue = await firstValueFrom(myObservable);
-        console.log(firstValue); // Salida: 1
-
-    - Beneficios:
-      - Limpieza del código: El uso de await evita la necesidad de encadenar múltiples suscripciones al observable con subscribe.
-      - Evita fugas de memoria: firstValueFrom asegura que la suscripción se cierra automáticamente después de recibir el primer valor, eliminando la necesidad de manejar manualmente la desuscripción.
-      - Compatibilidad con código basado en promesas: Si ya estás utilizando async/await en otras partes del código, este enfoque lo mantiene consistente.
-
-    - Consideraciones importantes
-      - Errores no manejados: Si ocurre un error durante la llamada HTTP, la promesa será rechazada. Se debería manejar este caso con un bloque try...catch.
-      -Solo el primer valor: Si el observable emite múltiples valores, este enfoque solo capturará el primero y luego se desuscribirá. Si necesitas manejar múltiples valores, deberías usar un enfoque diferente (como toArray o trabajar directamente con el observable).
-      -Uso con HttpClient: Angular HttpClient ya emite un único valor por defecto (la respuesta HTTP). Por lo tanto, usar firstValueFrom con observables de HttpClient es perfectamente adecuado.
+  /* FORMA 1: usando observables */
+  constructor() {
+    /* Preload additional info once the characters list is available */
+    /* DIFERENCIAS AL USAR FORMA 1:
+      - El servicio sigue devolviendo la lista de personajes como un Observable, lo cual es una buena práctica en Angular.
+      - Cuando la lista de personajes se carga (observable characters$), se recorre para realizar las llamadas adicionales usando makeApiCall.
+      - En lugar de esperar a eventos como el "loaded" en app-character-card, las llamadas a la API detallada se hacen de inmediato al cargar la lista de personajes.
+      - Cada llamada a makeApiCall usa subscribe, manteniendo las solicitudes no bloqueantes.
     */
-    try {
-      const character = await firstValueFrom(
-        this.charactersService.getCharacterInformation(url)
-      );
+    this.characters$.subscribe((characters) => {
+      characters.forEach((character) => {
+        console.log('this.makeApiCall(character.url)');
+        this.makeApiCall(character.url);
+      });
+    });
+  }
 
-      if (character?.id) {
-        /* ahora se tiene un arreglo con la información de cada character y ese character se irá haciendo mendiante se vaya llamando al makeApiCall */
-        this.characterInfo[character.id] = character;
-
-        // console.log("character", character);
-        // console.log("this.characterInfo", this.characterInfo);
-      } else {
-        console.warn('Character ID is missing in the response:', character);
-      }
-    } catch (error) {
-      console.error('Error in makeApiCall:', error);
+  public makeApiCall(url: string): void {
+    if (!this.characterInfo[url]) {
+      this.charactersService
+        .getCharacterInformation(url)
+        .subscribe((character) => {
+          this.characterInfo[character.id] = character;
+        });
     }
   }
+
+  /* FORMA 2: transformando el observable en una promesa */
+  // public async makeApiCall(url: string): Promise<void> {
+  //   /* "firstValueFrom" es un método de RxJs que convierte un observable en una promesa, en este caso el observable retornado por el servicio, luego espera (usando await) a que la promesa se resuelva y guarda el valor en la variable character. Como "firstValueFrom" devuelve una promesa entonces se puede usar el "async/await" para esperar a que la promesa se resuelva.
+
+  //   - Lo que realiza es:
+  //     - Se suscribe al observable proporcionado.
+  //     - Espera al primer valor emitido por el observable.
+  //     - Una vez que recibe el primer valor, automáticamente:
+  //       - Resuelve la promesa con ese valor.
+  //       - Se desuscribe del observable.
+
+  //   - Por ejemplo:
+  //       const myObservable = of(1, 2, 3); // Un observable que emite 1, 2 y 3.
+  //       const firstValue = await firstValueFrom(myObservable);
+  //       console.log(firstValue); // Salida: 1
+
+  //   - Beneficios:
+  //     - Limpieza del código: El uso de await evita la necesidad de encadenar múltiples suscripciones al observable con subscribe.
+  //     - Evita fugas de memoria: firstValueFrom asegura que la suscripción se cierra automáticamente después de recibir el primer valor, eliminando la necesidad de manejar manualmente la desuscripción.
+  //     - Compatibilidad con código basado en promesas: Si ya estás utilizando async/await en otras partes del código, este enfoque lo mantiene consistente.
+
+  //   - Consideraciones importantes
+  //     - Errores no manejados: Si ocurre un error durante la llamada HTTP, la promesa será rechazada. Se debería manejar este caso con un bloque try...catch.
+  //     -Solo el primer valor: Si el observable emite múltiples valores, este enfoque solo capturará el primero y luego se desuscribirá. Si necesitas manejar múltiples valores, deberías usar un enfoque diferente (como toArray o trabajar directamente con el observable).
+  //     -Uso con HttpClient: Angular HttpClient ya emite un único valor por defecto (la respuesta HTTP). Por lo tanto, usar firstValueFrom con observables de HttpClient es perfectamente adecuado.
+  //   */
+  //   try {
+  //     const character = await firstValueFrom(
+  //       this.charactersService.getCharacterInformation(url)
+  //     );
+
+  //     if (character?.id) {
+  //       /* ahora se tiene un arreglo con la información de cada character y ese character se irá haciendo mendiante se vaya llamando al makeApiCall */
+  //       this.characterInfo[character.id] = character;
+
+  //       // console.log("character", character);
+  //       // console.log("this.characterInfo", this.characterInfo);
+  //     } else {
+  //       console.warn('Character ID is missing in the response:', character);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error in makeApiCall:', error);
+  //   }
+  // }
 }
 
 /* ************************************************************************************************************************ */
