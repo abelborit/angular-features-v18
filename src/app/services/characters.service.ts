@@ -16,8 +16,9 @@ export class CharactersService {
     // console.log('first time');
   }
 
-  private mainApiUrl: string = 'https://rickandmortyapi.com/api/';
-  private charactersApiUrl: string = this.mainApiUrl + 'character';
+  /* aquí ya no sería tan necesario tiparlo explícitamente porque ya lo reconoce como un string y también las reglas de eslint agregadas nos menciona lo mismo */
+  private readonly mainApiUrl = 'https://rickandmortyapi.com/api/';
+  private readonly charactersApiUrl: string = this.mainApiUrl + 'character';
 
   /* para hacer las peticiones HTTP se podría trabajar como normalmente se haría usando fetch nativo de javascript o con axios pero con Angular al hacer peticiones HTTP vamos a querer usar los interceptores, suscriptores, etc... */
   /* en la mayoría de los casos en los que puede usar promesas, los observables pueden hacerlo mejor. Una ventaja clave de los observables es que se pueden cancelar (dando de baja la suscripción). Esa es una característica que también es útil cuando solo se devuelve un único valor. Además, todas las funciones de operador de observables que manejan múltiples solicitudes asíncronas paralelas son mucho más fáciles de usar que elaborar manualmente algunas promesas de manejo juntas. */
@@ -49,7 +50,7 @@ export class CharactersService {
 
         // catchError(() => of([])) // forma corta con return implícito y sin usar el error
         catchError((error) => {
-          console.log(error);
+          console.log('error in getAllCharacters', error);
           /* regresar un nuevo observable usando el of() de RxJs que sirve para construir un nuevo observable a partir del argumento que se le manda, es decir, en este caso si hay un error entonces va a regresar un nuevo observable pero este será un arreglo vacío */
           return of([]);
         })

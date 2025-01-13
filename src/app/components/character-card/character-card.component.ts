@@ -26,17 +26,17 @@ export class CharacterCardComponent implements OnInit {
 
   /* sintaxis nueva  */
   /* ahora es más facil usando la nueva sintaxis usando "input()" y también le podemos decir que sea una propiedad requerida. Ahora de esta forma nos dice que "input" será una señal o un signal. Aquí ya se detecta automáticamente que es un "InputSignal<CharacterInterface>" pero igual se está colocando de forma explícita */
-  character: InputSignal<CharacterInterface> =
+  public readonly character: InputSignal<CharacterInterface> =
     input.required<CharacterInterface>();
 
   /* este "characterInfo" puede ser opcional en una primera instancia por eso no se le coloca el ".required" y por eso también tiene el "undefined" */
-  characterInfo: InputSignal<CharacterInterface | undefined> =
+  public readonly characterInfo: InputSignal<CharacterInterface | undefined> =
     input<CharacterInterface>();
 
   /* nueva forma de utilizar el "output()" para mandar información desde el hijo hacia el padre */
-  loaded: OutputEmitterRef<string> = output<string>();
+  public readonly loaded: OutputEmitterRef<string> = output<string>();
 
-  /* en este caso se quiere que cuando el card recia la información del character desde el padre entonces emitirá al padre la url de ese character */
+  /* en este caso se quiere que cuando el card reciba la información del character desde el padre entonces emitirá al padre la url de ese character */
   ngOnInit(): void {
     this.loaded.emit(this.character().url);
 

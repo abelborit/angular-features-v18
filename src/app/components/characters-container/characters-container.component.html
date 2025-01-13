@@ -37,3 +37,18 @@
     }
   }
 </div>
+
+<!-- ************************************************************************************************************************ -->
+
+<!-- versión anterior -->
+<!-- <div *ngIf="characters$ | async as characters">
+  <ng-container *ngFor="let character of characters; trackBy: trackById">
+    <div *ngIf="character">
+      <app-character-card
+        [character]="character"
+        [characterInfo]="characterInfo[character.id]"
+        (loaded)="makeApiCall($event)"
+      ></app-character-card>
+    </div>
+  </ng-container>
+</div> -->

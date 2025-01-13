@@ -50,14 +50,14 @@ export class CharactersContainerComponent {
   /* -- VERSIÓN v18: para inyectar un servicio -- */
   /* nosotros podemos convertir un observable a una señal porque por mientras Angular trabaja fuertemente con los observables pero puede ser que en un futuro use plenamente las señales pero en este caso queremos usar las señales para poder optimizar el rendimiento aunque tranquilamente se podría seguir trabajando con los observables como la FORMA TRADICIONAL */
   /* hacer tests con inject: https://www.youtube.com/watch?v=Tvsa4OMUGXs&ab_channel=RainerHahnekamp */
-  private charactersService = inject(CharactersService);
+  private readonly charactersService = inject(CharactersService);
 
-  public characters$: Observable<CharacterInterface[]> =
+  public readonly characters$: Observable<CharacterInterface[]> =
     this.charactersService.getAllCharacters();
 
-  public characterInfo: Record<string, CharacterInterface> = {};
+  public readonly characterInfo: Record<string, CharacterInterface> = {};
 
-  async makeApiCall(url: string) {
+  public async makeApiCall(url: string): Promise<void> {
     /* "firstValueFrom" es un método de RxJs que convierte un observable en una promesa, en este caso el observable retornado por el servicio, luego espera (usando await) a que la promesa se resuelva y guarda el valor en la variable character. Como "firstValueFrom" devuelve una promesa entonces se puede usar el "async/await" para esperar a que la promesa se resuelva.
 
     - Lo que realiza es:
