@@ -36,11 +36,22 @@
       } -->
 
       <!-- FORMA 2: transformando el observable en una promesa -->
-      @defer (on viewport) {
+      <!-- @defer (on viewport) {
         <app-character-card
           [character]="character"
           [characterInfo]="characterInfo[character.id]"
           (loaded)="makeApiCall($event)"
+        />
+      } @placeholder {
+        <div class="placeholder"></div>
+      } -->
+
+      <!-- FORMA 3: usando IntersectionObserver y @Output() -->
+      @defer (on viewport) {
+        <app-character-card
+          [character]="character"
+          [characterInfo]="characterInfo[character.id]"
+          (visible)="makeApiCall($event)"
         />
       } @placeholder {
         <div class="placeholder"></div>
